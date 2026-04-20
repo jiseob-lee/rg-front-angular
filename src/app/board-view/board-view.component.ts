@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd, RoutesRecognized } from '@angular/router';
 
 import { isPlatformServer } from '@angular/common';
@@ -69,7 +69,8 @@ export class BoardViewComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private titleService: Title,
 	private ngZone: NgZone,
-	private sanitizer: DomSanitizer
+	private sanitizer: DomSanitizer,
+	private cdr: ChangeDetectorRef
   ) {
 
     //this.routeEvent(this.router);
@@ -160,6 +161,7 @@ export class BoardViewComponent implements OnInit {
 
 
     this.getEnvironmentInfo(lang);
+	this.getBoardContent(this.boardArticleIdx, this.locale);
     this.getAttachmentList(this.boardNo, this.boardArticleIdx);
 
   }
@@ -180,8 +182,10 @@ export class BoardViewComponent implements OnInit {
 
 	  if (this.lang == "" || this.lang == null) {
 	    this.locale = response.locale;
+		this.cdr.detectChanges();
 	  } else {
 	    this.locale = this.lang;
+		this.cdr.detectChanges();
 	  }
 
 	  //console.log("lang 3", this.lang);
@@ -193,7 +197,7 @@ export class BoardViewComponent implements OnInit {
         },
 	() => {},
 	() => {
-	  this.getBoardContent(this.boardArticleIdx, this.locale);
+	  //this.getBoardContent(this.boardArticleIdx, this.locale);
 	}
       );
   }

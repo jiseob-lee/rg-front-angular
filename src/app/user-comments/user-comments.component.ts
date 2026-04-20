@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, PLATFORM_ID, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Inject, PLATFORM_ID, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 
 import { isPlatformBrowser } from '@angular/common';
 
@@ -86,7 +86,9 @@ export class UserCommentsComponent implements OnInit {
     //private http: Http,
     private router: Router,
 	@Inject(PLATFORM_ID) private platformId: Object,
-	private http: HttpClient) {
+	private http: HttpClient,
+	private cdr: ChangeDetectorRef
+  ) {
     //this.routeEvent(this.router);
   }
 
@@ -183,6 +185,7 @@ export class UserCommentsComponent implements OnInit {
       	  //alert("this.loginId : " + this.loginId);
 
       	  this.csrfToken = response["csrfToken"];
+		  this.cdr.detectChanges();
 		  console.log('browser csrfToken 2 :', response['csrfToken']);
       	  //this.cookieService.set( "referrer", response["referrer"], 0, "/", '.jisblee.me' );
         }
@@ -192,6 +195,7 @@ export class UserCommentsComponent implements OnInit {
 	    this.environmentService.getEnvironmentInfo(this.lang).subscribe(response => {
 		  console.log('browser csrfToken 1 :', response['csrfToken']);
   	      this.csrfToken = response['csrfToken'];
+		  this.cdr.detectChanges();
         });
       }
   }
