@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 
 //import { default as jQuery } from 'jquery';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap, startWith } from 'rxjs';
 
 import { BoardService } from '../board.service';
 import { EnvironmentService } from '../environment.service';
@@ -46,7 +46,8 @@ export class UserCommentsComponent implements OnInit {
 
   lang: string = "";
 
-  commentList: Comment[] = [];
+  //commentList: Comment[] = [];
+  commentList: Observable<Comment[]> = of([]);
 
   userName = "";
   userPassword = "";
@@ -200,6 +201,7 @@ export class UserCommentsComponent implements OnInit {
       }
   }
 
+/*
   getUserCommentList(boardArticleIdx: number): void {
     this.boardService.getUserCommentList(boardArticleIdx)
       .subscribe(response => {
@@ -224,6 +226,28 @@ export class UserCommentsComponent implements OnInit {
       }
     );
   }
+*/
+
+getUserCommentList(boardArticleIdx: number): void {
+  this.commentList = this.boardService.getUserCommentList(boardArticleIdx).pipe(
+    tap(response => {
+      this.content2Text = {};
+      //this.update1ButtonVisible = {};
+      //this.update2ButtonVisible = {};
+      //this.content1Visible = {};
+      //this.content2Visible = {};
+
+      (response ?? []).forEach(item => {
+        this.content2Text[item.commentIdx] = item.content;
+        this.update1ButtonVisible[item.commentIdx] = true;
+        this.update2ButtonVisible[item.commentIdx] = false;
+        this.content1Visible[item.commentIdx] = true;
+        this.content2Visible[item.commentIdx] = false;
+      });
+    }),
+    startWith([])
+  );
+}
 
 
   checkLength(e: KeyboardEvent) {
@@ -342,12 +366,22 @@ export class UserCommentsComponent implements OnInit {
 	//this.content1Visible = true;
 	//this.content2Visible = false;
 	
-	this.commentList.forEach(item => {
-	  this.update1ButtonVisible[item.commentIdx] = true;
-	  this.update2ButtonVisible[item.commentIdx] = false;
-	  this.content1Visible[item.commentIdx] = true;
-	  this.content2Visible[item.commentIdx] = false;
+	this.commentList.subscribe(res => {
+	
+	  res.forEach(item => {
+	    this.update1ButtonVisible[item.commentIdx] = true;
+        this.update2ButtonVisible[item.commentIdx] = false;
+        this.content1Visible[item.commentIdx] = true;
+        this.content2Visible[item.commentIdx] = false;
+      });
 	});
+	
+	//this.commentList.forEach(item => {
+	  //this.update1ButtonVisible[item.commentIdx] = true;
+	  //this.update2ButtonVisible[item.commentIdx] = false;
+	  //this.content1Visible[item.commentIdx] = true;
+	  //this.content2Visible[item.commentIdx] = false;
+	//});
   }
 
   toggleUpdateButton(commentIdx: number) {

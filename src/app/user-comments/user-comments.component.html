@@ -39,7 +39,7 @@
 </form>
 
 
-	<table class="comment" *ngFor="let item of commentList; let i = index">
+	<table class="comment" *ngFor="let item of commentList | async; let i = index">
 	<tbody>
 		<tr>
 			<td width="650px" id="content1_{{item.commentIdx }}" style="text-align: left;" *ngIf="content1Visible[item.commentIdx]"><pre>{{item.content }}</pre></td>
