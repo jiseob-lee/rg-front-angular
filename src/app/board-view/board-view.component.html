@@ -1,0 +1,86 @@
+
+	<div class="content">
+
+
+		<div style="text-align: left; margin: 10px;">
+		<ng-container *ngIf="boardContent | async as content">
+		  <table class="board">
+		    <colgroup>
+		      <col style="width: 60px;" />
+		      <col style="width: 128px;" />
+		      <col style="width: 60px;" />
+		      <col style="width: 128px;" />
+		      <col style="width: 60px;" />
+		      <col style="width: 127px;" />
+		      <col style="width: 60px;" />
+		      <col style="width: 127px;" />
+		    </colgroup>
+		    <tbody>
+		    <tr>
+		      <td colspan="8" style="border: 0px; padding: 12px; text-align: right;">
+				<button (click)="goList()" *ngIf="locale == 'ko'">목록</button>
+				<button (click)="goList()" *ngIf="locale != 'ko'">List</button>
+		      </td>
+		    </tr>
+		    <tr>
+		      <td align="center" *ngIf="locale == 'ko'">제목</td>
+			  <td align="center" *ngIf="locale != 'ko'">Title</td>
+		      <td colspan="7" align="left" *ngIf="locale == 'ko'">{{content == null ? "" : content.subject }}</td>
+		      <td colspan="7" align="left" *ngIf="locale != 'ko'">{{content == null ? "" : content.subject }}<br/>{{content == null ? "" : content.subjectEng }}</td>
+		    </tr>
+		    <tr *ngIf="locale == 'ko'">
+		      <td align="center">글쓴이</td>
+			  <td align="left">{{content == null ? "" : content.userNameCreated }}</td>
+		      <td align="center">작성일</td>
+		      <td align="left">{{content == null ? "" : content.dateCreated }}</td>
+		      <td align="center">수정일</td>
+		      <td align="left">{{content == null ? "" : content.dateModified }}</td>
+			  <td align="center">조회수</td>
+		      <td align="left">{{content == null ? "" : content.hitCount }}</td>
+		    </tr>
+		    <tr *ngIf="locale != 'ko'">
+		      <td align="center">Writer</td>
+		      <td align="left">{{content == null ? "" : content.userNameCreatedEng }}</td>
+		      <td align="center">Write Date</td>
+		      <td align="left">{{content == null ? "" : content.dateCreated }}</td>
+		      <td align="center">Modify Date</td>
+		      <td align="left">{{content == null ? "" : content.dateModified }}</td>
+		      <td align="center">View Count</td>
+		      <td align="left">{{content == null ? "" : content.hitCount }}</td>
+		    </tr>
+		    <tr align="center">
+		      <td colspan="8" align="left" class="body" *ngIf="locale == 'ko'" [innerHTML]="content == null ? '' : content.contentSafe"></td>
+		      <td colspan="8" align="left" class="body" *ngIf="locale != 'ko'" [innerHTML]="content == null ? '' : content.contentEngSafe"></td>
+		    </tr>
+		    
+			
+		    <tr align="center" *ngIf="attachmentList.length > 0">
+		      <td align="center" *ngIf="locale == 'ko'">첨부파일</td>
+			  <td align="center" *ngIf="locale != 'ko'">Attachment File</td>
+		      <td colspan="7" align="left">
+		      
+		        <div style="line-height: 175%;" *ngFor="let item of attachmentList; let i = index">
+		          <a href="/fileDownload.do?idx={{item.attachmentIdx }}&filename={{item.serverFileName }}">{{item.attachmentName }}.{{item.attachmentExt }}</a>
+		          ({{item.attachmentSize | number }} byte)
+		        </div>
+		        
+		      </td>
+		    </tr>
+			
+		    
+		    <tr>
+		      <td colspan="8" style="border: 0px; padding: 12px; text-align: right;">
+				<button (click)="goList()" *ngIf="locale == 'ko'">목록</button>
+				<button (click)="goList()" *ngIf="locale != 'ko'">List</button>
+		      </td>
+		    </tr>
+		    </tbody>
+		  </table>
+		</ng-container>
+		</div>
+
+		
+		<app-user-comments [boardArticleIdx]="boardArticleIdx" [csrfToken]="csrfToken" [locale]="locale"></app-user-comments>
+		
+
+	</div>

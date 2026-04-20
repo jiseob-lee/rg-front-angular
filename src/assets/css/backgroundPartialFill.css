@@ -1,0 +1,25 @@
+table.partialFill td {
+  width: 25%;  /* only for demo, not really required */
+  background-image: linear-gradient(to right, rgba(0, 150, 0, 1) 0%, rgba(0, 175, 0, 1) 17%, rgba(0, 190, 0, 1) 33%, rgba(82, 210, 82, 1) 67%, rgba(131, 230, 131, 1) 83%, rgba(180, 221, 180, 1) 100%);  /* your gradient */
+  background-repeat: no-repeat;  /* don't remove */
+}
+
+table.partialFill td.negative {
+  background-image: linear-gradient(to left, rgba(0, 150, 0, 1) 0%, rgba(0, 175, 0, 1) 17%, rgba(0, 190, 0, 1) 33%, rgba(82, 210, 82, 1) 67%, rgba(131, 230, 131, 1) 83%, rgba(180, 221, 180, 1) 100%);  /* your gradient */
+  background-position: 100% 100%;
+}  
+/* just for demo */
+
+table.partialFill {
+  table-layout: fixed;
+  width: 400px;
+}
+
+table.partialFill, table.partialFill tr, table.partialFill td {
+  border: 1px solid;
+}
+
+.partialFill2 {
+  background-image: linear-gradient(to right, rgba(0, 150, 0, 1) 0%, rgba(255, 255, 255, 1) 1%, rgba(255, 255, 255, 1) 100%);
+  background-repeat: no-repeat;  /* don't remove */
+}

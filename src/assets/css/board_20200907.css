@@ -1,0 +1,285 @@
+
+/* css animation */
+div.ani {
+  background-color: white;
+  width: 180px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  border: 1px solid;
+  margin: 10px;
+}
+
+pre {
+  /* padding: 10px; */
+  margin: 10px;
+}
+
+ul.ani {
+  width: calc(180px * 10);
+  padding: 0px;
+  margin: 0px;
+  background-color: white;
+}
+
+ul.ani li {
+  display: inline-block;
+  margin: 10px;
+  padding: 0px;
+  width: 155px;
+}
+
+ul.ani {
+  animation-duration: 60s;
+  animation-name: slide;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slide {
+	0%    {margin-left: 15px;}
+	5%    {margin-left: -165px;}
+	10%   {margin-left: -350px;}
+	15%   {margin-left: -525px;}
+	20%   {margin-left: -705px;}
+	25%   {margin-left: -885px;}
+	30%   {margin-left: -1065px;}
+	35%   {margin-left: -1245px;}
+	40%   {margin-left: -1425px;}
+	45%   {margin-left: -1605px;}
+
+	50%   {margin-left: -1605px;}
+
+	55%   {margin-left: -1425px;}
+	60%   {margin-left: -1245px;}
+	65%   {margin-left: -1065px;}
+	70%   {margin-left: -885px;}
+	75%   {margin-left: -705px;}
+	80%   {margin-left: -525px;}
+	85%   {margin-left: -350px;}
+	90%   {margin-left: -165px;}
+	95%   {margin-left: 15px;}
+	100%   {margin-left: 15px;}
+}
+
+
+
+
+
+div.article, div.rmi, div.apr {
+  /* border: 1px dashed lightgray; */ 
+  background-color: #2d474a; 
+  width: 98%; 
+  padding: 5px; 
+  margin: 3px; 
+  color: #cdcfd1;
+  line-height: 160%;
+  
+  -webkit-border-radius: 7px;
+  border-radius: 7px;
+}
+
+pre.article, pre.rmi, pre.apr {
+  word-break: break-all;
+  word-wrap: break-word;      /* IE 5.5-7 */
+  white-space: -moz-pre-wrap; /* Firefox 1.0-2.0 */
+  white-space: pre-wrap;      /* current browsers */
+}
+
+ol.article li, ol.rmi li, ol.apr li {
+  color: white;
+}
+
+
+
+div {
+	line-height: 140%;
+}
+
+p {
+	line-height: 140%;
+	margin-block-start: 0.6em;
+    margin-block-end: 0.6em;
+}
+
+p.content {
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+
+p.content br {
+  line-height: 230%;
+}
+
+
+div.main {
+	width: 900px;
+	text-align: center;
+    margin: auto;
+}
+
+/* 게시판 선택 메뉴 */
+ul.board {
+	float: right;
+}
+
+li.boardItem {
+  display: inline-block;
+  list-style: none;
+  padding: 10px;
+  font-size: 12pt;
+}
+
+
+
+table.board {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 890px;
+  clear: both;
+}
+
+table.board td {
+  border: 1px solid lightgray;
+  
+  font-size: 12pt;
+  border-left: 0px;
+  border-right: 0px;
+  padding-left: 5px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  line-height: 135%;
+}
+
+table {
+  table-layout: fixed;
+}
+
+td {
+  word-wrap: break-word;         /* All browsers since IE 5.5+ */
+  overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
+  white-space: normal;
+  /* padding: 12px 0 12px; */
+}
+
+a {
+  white-space: normal;
+  text-decoration: none;
+}
+
+a:hover, a:active {
+  text-decoration : underline;
+}
+
+table.board td.borderNone {
+  border: 0px;
+}
+
+table.board td.body {
+  line-height: 100%;
+}
+
+table.board a:link, table.board a:visited {
+  text-decoration : none;
+}
+
+table.board a:hover, table.board a:active {
+  text-decoration : underline;
+}
+
+.breakWord {
+  text-align: left;
+  word-wrap: break-word;         /* All browsers since IE 5.5+ */
+  overflow-wrap: break-word;  /* Renamed property in CSS3 draft spec */
+  padding-left: 12px;
+}
+
+table.notice {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 750px;
+  clear: both;
+}
+
+table.notice td {
+  border: 1px solid lightgray;
+  font-size: 12pt;
+  border-left: 0px;
+  border-right: 0px;
+  padding-left: 5px;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  
+  word-wrap: break-word;         /* All browsers since IE 5.5+ */
+  overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
+  white-space: normal;
+}
+
+
+.commentInput {
+  margin: 0 auto;
+  border: none; /* <-- This thing here */
+  border:solid 1px #ccc;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.button {
+  padding: 5px 15px; 
+  background: #ccc; 
+  border: 0 none;
+  cursor: pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+} 
+
+.button2 {
+  padding: 2px 5px;
+  margin: 1px; 
+  background: #ccc; 
+  border: 0 none;
+  cursor: pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  font-size: 90%;
+} 
+
+.button:active, .button2:active {
+  /* background-color: #3e8e41; */
+  /* box-shadow: 0 5px #666; */
+  transform: translateY(3px);
+}
+
+
+table.articleViewed td {
+  padding : 2px;
+}
+
+
+span.yellow {
+  color: yellow;
+}
+
+span.yellowBg {
+  background-color: yellow;
+}
+
+span.underline {
+  text-decoration: underline;
+}
+
+.dblUnderlined {
+  text-decoration: underline;
+  text-underline-position: under;
+}
+
+span > b {
+  font-size: 120%;
+}
+
+ul.referencedWebPage li {
+  margin-bottom: 10px;
+}

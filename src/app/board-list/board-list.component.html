@@ -1,0 +1,83 @@
+
+	<img src="https://jisblee.me/assets/images/{{ mainImage }}" style="border-radius: 20px;"/>
+	
+	<div class="content">
+
+	  <div style="margin: 10px; float: left; font-size: 10pt;">
+		<span *ngIf="locale == 'ko'">총 게시글 수</span>
+		<span *ngIf="locale != 'ko'">Total Article Count</span>
+		: {{ ((listCount | async) ?? 0) | number }}
+	  </div>
+	  
+
+	  <table class="board">
+	    <colgroup>
+	      <col style="width: 60px;" />
+	      <col style="width: 450px;" />
+	      <col style="width: 120px;" />
+	      <col style="width: 110px;" />
+		  <col style="width: 110px;" />
+	    </colgroup>
+	    
+	  <tbody>
+		<tr *ngIf="locale == 'ko'">
+	      <td>번호</td>
+	      <td>제 목</td>
+	      <td>게시판</td>
+	      <td>작성일</td>
+		  <td>수정일</td>
+	    </tr>
+	    <tr *ngIf="locale != 'ko'">
+	      <td>no.</td>
+	      <td>Title</td>
+	      <td>Board</td>
+	      <td>Write Date</td>
+		  <td>Update Date</td>
+	    </tr>
+	    
+		<tr *ngIf="((listCount | async) ?? 0) == 0">
+		  <td colspan="5" *ngIf="locale == 'ko'">게시글이 없습니다.</td>
+		  <td colspan="5" *ngIf="locale != 'ko'">No Articles.</td>
+		</tr>
+	    
+	    <ng-container *ngIf="list | async as articles">
+		<tr *ngFor="let item of articles; let i = index" onmouseover="this.className = 'partialFill2';" onmouseout="this.className = '';">
+		  <td>{{((listCount | async) ?? 0) - i - (pageNo - 1) * listLimit }}</td>
+		  <td align="left">
+		    <a href="/board/view/{{boardNo }}/{{pageNo }}/{{item.boardArticleIdx }}{{cookiePath}}">{{item == null ? "" : item.subject }}</a>
+			<br/>
+			<a href="/board/view/{{boardNo }}/{{pageNo }}/{{item.boardArticleIdx }}{{cookiePath}}" *ngIf="locale != 'ko'">{{item == null ? "" : item.subjectEng }}</a>
+		  </td>
+		  <td>{{item == null ? "" : item.boardName }}</td>
+		  <td>{{item == null ? "" : item.dateCreated }}</td>
+		  <td>{{item == null ? "" : item.dateModified }}</td>
+		</tr>
+	    </ng-container>
+	    
+	    <tr>
+	      <td colspan="5" style="border: 0px; padding: 16px; text-align: center; word-spacing: 5px;">
+	
+	        <div style="float: left; width: 80px;">
+	        &nbsp;
+	        </div>
+			
+			
+			<span *ngIf="linkStart > pageLinkCount">&nbsp;<a href="/board/list/{{boardNo}}/{{linkStart - pageLinkCount}}">&lt;</a></span>
+			
+			<span *ngFor="let i of linkArray">
+			    <span *ngIf="i == pageNo">&nbsp;<b>{{i }}</b>&nbsp;</span>
+			    <span *ngIf="i != pageNo">&nbsp;<a href="/board/list/{{boardNo }}/{{i }}{{cookiePath}}">{{i }}</a>&nbsp;</span>
+			</span>
+
+			<span *ngIf="linkStart + pageLinkCount <= linkEnd">&nbsp;<a href="/board/list/{{boardNo}}/{{linkStart + pageLinkCount}}">&gt;</a></span>
+			
+			&nbsp;
+	
+	      </td>
+	    </tr>
+	  </tbody>
+	  </table>
+
+
+	    
+	</div>

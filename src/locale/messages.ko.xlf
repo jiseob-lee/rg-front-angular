@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="totalArticleCount" datatype="html">
+        <source>총 게시글 수</source>
+		<target>총 게시글 수</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-list/board-list.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="no" datatype="html">
+        <source>번호</source>
+		<target>번호</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-list/board-list.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="title2" datatype="html">
+        <source>제 목</source>
+		<target>제 목</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-list/board-list.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="board" datatype="html">
+        <source>게시판</source>
+		<target>게시판</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-list/board-list.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="writeDate" datatype="html">
+        <source>작성일</source>
+		<target>작성일</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-list/board-list.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-view/board-view.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="noArticle" datatype="html">
+        <source>게시글이 없습니다.</source>
+		<target>게시글이 없습니다.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-list/board-list.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list" datatype="html">
+        <source>목록</source>
+		<target>목록</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-view/board-view.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-view/board-view.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="title" datatype="html">
+        <source>제목</source>
+		<target>제목</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-view/board-view.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="writer" datatype="html">
+        <source>글쓴이</source>
+		<target>글쓴이</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-view/board-view.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="viewCount" datatype="html">
+        <source>조회수</source>
+		<target>조회수</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-view/board-view.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="attachmentFile" datatype="html">
+        <source>첨부파일</source>
+		<target>첨부파일</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/board-view/board-view.component.html</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

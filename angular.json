@@ -22,15 +22,27 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+		  {
+		    "glob": "**/*",
+		    "input": "src/assets",
+		    "output": "assets"
+		  }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+	      "src/assets/css/backgroundPartialFill.css",
+	      "src/assets/css/board_20200907.css"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "security": {
-              "allowedHosts": []
+              "allowedHosts": [
+                "localhost",
+                "127.0.0.1",
+                "jisblee.me",
+		"www.jisblee.me"
+	       ]
             },
             "ssr": {
               "entry": "src/server.ts"

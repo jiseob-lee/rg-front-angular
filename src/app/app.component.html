@@ -1,0 +1,71 @@
+
+<div class="main">
+
+
+	<div style="padding: 5px; position: relative; z-index: 10;">
+	<!-- loginId : {{loginId}}. -->
+		<table style="float: left;">
+		<tbody>
+		<tr>
+		<td *ngIf="!loginId">
+	        <h3>&nbsp; 
+			<a href="/login.do" target="_self" *ngIf="locale == 'ko'">로그인</a>
+			<a href="/login.do" target="_self" *ngIf="locale != 'ko'">Login</a>
+			</h3>
+		</td>
+		<td *ngIf="!!loginId">
+			<h3>&nbsp;
+			<a href="javascript:document.logout.submit();" target="_self" *ngIf="locale == 'ko'">로그아웃</a>
+			<a href="javascript:document.logout.submit();" target="_self" *ngIf="locale != 'ko'">Logout</a>
+			&nbsp; 
+			<a href="/rg/" *ngIf="locale == 'ko'">내부</a>
+			<a href="/rg/" *ngIf="locale != 'ko'">Internal</a>
+			</h3>
+		</td>
+		<td style="padding-left: 10px; font-size: 12pt;">Language :</td>
+		<td>
+			<select name="language" [(ngModel)]="language" (change)="changeLanguage();">
+				<option value="ko">Korean</option>
+				<option value="en">English</option>
+			</select>
+		</td>
+		</tr>
+		</tbody>
+		</table>
+		
+		<ul class="board">
+			
+			<li class="boardItem" *ngIf="boardNo == 0">
+			  <a href="/board/list/0/1{{cookiePath}}" class="dblUnderlined" *ngIf="locale == 'ko'">전체 게시판</a>
+			  <a href="/board/list/0/1{{cookiePath}}" class="dblUnderlined" *ngIf="locale != 'ko'">Board Total</a>
+			</li>
+
+			<li class="boardItem" *ngIf="boardNo != 0">
+			  <a href="/board/list/0/1{{cookiePath}}" style="text-decoration:none; color:#000;" *ngIf="locale == 'ko'">전체 게시판</a>
+			  <a href="/board/list/0/1{{cookiePath}}" style="text-decoration:none; color:#000;" *ngIf="locale != 'ko'">Board Total</a>
+			</li>
+			
+			<ng-container *ngIf="manageBoardList$ | async as manageBoardList">
+			<li class="boardItem" *ngFor="let item of manageBoardList; trackBy: trackBoard">
+				<a href="/board/list/{{item.boardIdx}}/1{{cookiePath}}" class="dblUnderlined" *ngIf="boardNo == item.boardIdx">{{item.boardName}}</a>
+				<a href="/board/list/{{item.boardIdx}}/1{{cookiePath}}" style="text-decoration:none; color:#000;" *ngIf="boardNo != item.boardIdx">{{item.boardName}}</a>
+			</li>
+			</ng-container>
+			
+		</ul>
+	</div>
+
+
+    <router-outlet></router-outlet>
+
+
+    <form name="logout" action="/logout" method="post" target="_top">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+    </form>
+
+	<div style="margin-top: 10px; margin-bottom: 10px; text-align: right;">
+		<a href="/privacy_policy.html" *ngIf="locale == 'ko'" target="_blank">개인정보 처리방침</a>
+		<a href="/privacy_policy_en.html" *ngIf="locale != 'ko'" target="_blank">Privacy Policy</a>
+	</div>
+	
+</div>

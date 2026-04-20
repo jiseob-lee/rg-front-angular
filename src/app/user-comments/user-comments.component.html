@@ -1,0 +1,99 @@
+
+<div style="padding: 10px;">
+
+<h4 *ngIf="locale == 'ko'" style="text-align: left;">댓글</h4>
+<h4 *ngIf="locale == 'en'" style="text-align: left;">Comment</h4>
+
+<form method="post" name="commentInputFrm" id="commentInputFrm">
+<input type="hidden" name="boardArticleIdx" value="{{boardArticleIdx}}" />
+<input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
+<table class="comment">
+<tbody>
+	<tr>
+		<td *ngIf="locale == 'ko'">이름</td>
+		<td *ngIf="locale == 'en'">Name</td>
+		<td align="left">
+		<input type="text" maxlength="60" class="commentInput" [(ngModel)]="userName" name="userName" id="userName" #userNameInput />
+		&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  
+		<span *ngIf="locale == 'ko'">비밀번호</span>
+		<span *ngIf="locale == 'en'">Password</span>
+		<input type="password" class="commentInput" style="margin-left: 5px;" [(ngModel)]="userPassword" name="userPassword" id="userPassword" #userPasswordInput />
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<td *ngIf="locale == 'ko'">내용</td>
+		<td *ngIf="locale == 'en'">Content</td>
+		<td>
+			<textarea class="commentInput" style="width: 650px;" rows="3" [(ngModel)]="content" name="content" id="content" #contentInput ></textarea>
+
+		</td>
+		<td>
+			<button type="button" (click)="inputComment()" class="button" *ngIf="locale == 'ko'">입력</button>
+            <button type="button" (click)="inputComment()" class="button" *ngIf="locale == 'en'">Input</button>
+		</td>
+	</tr>
+</tbody>
+</table>
+</form>
+
+
+	<table class="comment" *ngFor="let item of commentList; let i = index">
+	<tbody>
+		<tr>
+			<td width="650px" id="content1_{{item.commentIdx }}" style="text-align: left;" *ngIf="content1Visible[item.commentIdx]"><pre>{{item.content }}</pre></td>
+			<td width="650px" id="content2_{{item.commentIdx }}" *ngIf="content2Visible[item.commentIdx]"><textarea style="width: 100%;" id="content2Text_{{item.commentIdx }}" rows="5" [(ngModel)]="content2Text[item.commentIdx]"></textarea></td>
+			<td align="center" width="125px">
+			<span *ngIf="locale == 'ko'">작성자</span>
+			<span *ngIf="locale == 'en'">Writer</span>
+			-
+			{{item.userName }}<br style="line-height: -5px;"/>
+			{{item.dateCreated }}<br style="line-height: 200%;"/>
+			
+			<button (click)="toggleUpdateButton(item.commentIdx)" id="update1Button_{{item.commentIdx }}" class="button2" *ngIf="update1ButtonVisible[item.commentIdx] && locale == 'ko'">수정</button>
+			<button (click)="toggleUpdateButton(item.commentIdx)" id="update1Button_{{item.commentIdx }}" class="button2" *ngIf="update1ButtonVisible[item.commentIdx] && locale == 'en'">Modify</button>
+
+			<button (click)="checkPassword(item.commentIdx, 'update')" id="update2Button_{{item.commentIdx }}" class="button2" *ngIf="update2ButtonVisible[item.commentIdx] && locale == 'ko'">반영</button>
+			<button (click)="checkPassword(item.commentIdx, 'update')" id="update2Button_{{item.commentIdx }}"  class="button2" *ngIf="update2ButtonVisible[item.commentIdx] && locale == 'en'">Apply</button>
+			
+			<button (click)="checkPassword(item.commentIdx, 'delete')" class="button2" *ngIf="locale == 'ko'">삭제</button>
+			<button (click)="checkPassword(item.commentIdx, 'delete')" class="button2" *ngIf="locale == 'en'">Delete</button>
+
+			</td>
+		</tr>
+	</tbody>
+	</table>
+
+
+<div id="layer1" class="pop-layer" #layer1Div *ngIf="layer1Visible">
+    <div class="pop-container">
+        <div class="pop-conts">
+
+            <div class="ctxt mb20">
+			    <span *ngIf="locale == 'ko'">비밀번호를 확인합니다.</span>
+				<span *ngIf="locale == 'en'">Check Password.</span>
+				<br/><br/>
+				<span *ngIf="locale == 'ko'">댓글 등록시 입력한 비밀번호를 입력해주시기 바랍니다.</span>
+				<span *ngIf="locale == 'en'">Please enter your password when registering your comment.</span>
+				<br/><br/>
+				<form name="temp1" method="post" action="/temp1">
+                <input type="password" name="userPasswordPopup" id="userPasswordPopup" [(ngModel)]="userPasswordPopup" #userPasswordPopupInput /><br/>
+                </form>
+            </div>
+
+            <div class="btn-r" *ngIf="locale == 'ko'">
+            	<a href="javascript:void(0);" (click)="submitPasswordPopup();" class="btn-layerClose" style="text-decoration: none;">확인</a> &nbsp;
+                <a href="javascript:void(0);" (click)="closePasswordPopup();" class="btn-layerClose" style="text-decoration: none;">취소</a>
+            </div>
+            <div class="btn-r" *ngIf="locale == 'en'">
+            	<a href="javascript:void(0);" (click)="submitPasswordPopup();" class="btn-layerClose" style="text-decoration: none;">Confirm</a> &nbsp;
+                <a href="javascript:void(0);" (click)="closePasswordPopup();" class="btn-layerClose" style="text-decoration: none;">Cancel</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+</div>
