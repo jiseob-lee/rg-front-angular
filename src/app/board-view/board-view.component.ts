@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angu
 import { ActivatedRoute, Router, NavigationEnd, RoutesRecognized } from '@angular/router';
 
 import { isPlatformServer } from '@angular/common';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { BrowserModule } from '@angular/platform-browser';
@@ -159,8 +159,10 @@ export class BoardViewComponent implements OnInit {
       //console.log("previous url", e[0].urlAfterRedirects); // previous url
     //});
 
-
-    this.getEnvironmentInfo(lang);
+    if (isPlatformBrowser(this.platformId)) {
+      this.getEnvironmentInfo(lang);
+	}
+	
 	this.getBoardContent(this.boardArticleIdx, this.locale);
     this.getAttachmentList(this.boardNo, this.boardArticleIdx);
 
@@ -192,6 +194,7 @@ export class BoardViewComponent implements OnInit {
 	  //console.log("locale 3-1", this.locale);
 
 	  this.loginId = response.loginId;
+      this.cdr.detectChanges();
 
 	  //this.getBoardContent(this.boardArticleIdx, locale);
         },

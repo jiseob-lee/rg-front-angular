@@ -131,22 +131,6 @@ export class UserCommentsComponent implements OnInit {
     this.lang = lang;
     //console.log("lang 4", lang);
 
-    this.environmentService.getEnvironmentInfo(this.lang)
-      .subscribe(response => {
-
-          if (this.lang == "" || this.lang == null) {
-	    this.locale = response.locale;
-	  } else {
-	    this.locale = this.lang;
-	  }
-
-	  //console.log("lang 4", this.lang);
-	  //console.log("locale 4", this.locale);
-
-	  this.loginId = response.loginId;
-        }
-      );
-
     //this.$('.btn-example').click(function(){
       //let jQueryhref = this.$(this).attr('href');
       //this.layer_popup(jQueryhref);
@@ -160,7 +144,11 @@ export class UserCommentsComponent implements OnInit {
         //});
 
 	//console.log("comment form", this.form);
-    this.getEnvironmentInfo();
+    
+	if (isPlatformBrowser(this.platformId)) {
+	  this.getEnvironmentInfo();
+	}
+	
   }
 
   getEnvironmentInfo() {
@@ -176,13 +164,17 @@ export class UserCommentsComponent implements OnInit {
 
       	  if (this.lang == "" || this.lang == null) {
       	    this.locale = response.locale;
+			this.cdr.detectChanges();
       	  } else {
       	    this.locale = this.lang;
+			this.cdr.detectChanges();
       	  }
 
       	  this.loginId = response["loginId"];
+		  this.cdr.detectChanges();
 
           console.log("this.loginId", this.loginId);
+		  
       	  //alert("this.loginId : " + this.loginId);
 
       	  //this.csrfToken = response["csrfToken"];
@@ -600,8 +592,5 @@ submitPasswordPopup(): void {
 	  });
 	  
   }
-
-
-
 
 }

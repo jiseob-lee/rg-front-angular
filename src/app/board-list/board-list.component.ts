@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, ChangeDetectorRef, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, NgZone, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 //import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from '../message.service';
@@ -66,7 +66,8 @@ export class BoardListComponent implements OnInit, OnDestroy {
     private titleService: Title,
 	private cdr: ChangeDetectorRef,
 	private ngZone: NgZone,
-	private sharedService: SharedService
+	private sharedService: SharedService,
+	@Inject(PLATFORM_ID) private platformId: Object
   ) {
     //this.routeEvent(this.router);
   }
@@ -157,7 +158,11 @@ export class BoardListComponent implements OnInit, OnDestroy {
 		this.getBoardList(this.boardNo, this.pageNo, this.lang);
       });
 	
-    this.getEnvironmentInfo();
+	
+	if (isPlatformBrowser(this.platformId)) {
+      this.getEnvironmentInfo();
+	}
+	
     //this.getManageBoardList();
     this.getBoardListCount(this.boardNo);
 	//this.getBoardList(this.boardNo, this.pageNo, this.lang);
@@ -186,6 +191,7 @@ export class BoardListComponent implements OnInit, OnDestroy {
 	  //console.log("EnvironmentInfo 2 : this.locale", this.locale);
 
 	  this.loginId = response.loginId;
+	  this.cdr.detectChanges();
 	  //this.log(response.loginId);
         },
 	() => {},

@@ -1,7 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID, Optional, Injector } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Environment } from './environment';
@@ -49,7 +49,7 @@ export class EnvironmentService {
     //let url = window !== undefined && window.location.hostname == "localhost" ? `http://localhost:8080/getEnvironment.do` : `https://jisblee.me/getEnvironment.do`;
     //let url = `https://jisblee.me/getEnvironment.do`;
 
-    //console.log("EnvironmentInfo 1", url);
+    console.log("EnvironmentInfo 1", url);
 
     const headers = new HttpHeaders().set('Access-Control-Allow-Origin', '*')
 			             .set("Content-Type", "application/x-www-form-urlencoded")
@@ -59,7 +59,16 @@ export class EnvironmentService {
 				     .set('withCredentials', 'true');
     let options = { headers: headers };
 
-    return this.http.get<Environment>(url, { withCredentials: true });
+    return this.http.get<Environment>(url, { withCredentials: true }).pipe(
+      tap({
+        next: (res) => console.log('Environment GET success:', res),
+        error: (err) => console.error('Environment GET error:', err)
+      }),
+      catchError((err) => {
+        console.error('Environment GET error:', err);
+        return throwError(() => err);
+      })
+    );
   }
 
   /* 공개 게시판 목록을 구한다. */

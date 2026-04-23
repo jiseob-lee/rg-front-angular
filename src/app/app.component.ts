@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap, withLatestFrom, filter, startWith } from 'rxjs/operators';
@@ -59,7 +59,8 @@ export class AppComponent implements OnInit {
     private cookieService: CookieService,
 	private cdr: ChangeDetectorRef,
 	private sharedService: SharedService,
-	private http: HttpClient
+	private http: HttpClient,
+	@Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   ngOnInit() {
@@ -74,14 +75,18 @@ export class AppComponent implements OnInit {
     console.log("router.url 1", this.router.url);
 
 	  this.syncRouteState();
-	  this.getEnvironmentInfo();
+	  if (isPlatformBrowser(this.platformId)) {
+	    this.getEnvironmentInfo();
+	  }
 	  this.getManageBoardList();
 
 	  this.router.events.pipe(
 		filter(e => e instanceof NavigationEnd)
 	  ).subscribe(() => {
 		  this.syncRouteState();
-		  this.getEnvironmentInfo();
+		  if (isPlatformBrowser(this.platformId)) {
+		    this.getEnvironmentInfo();
+		  }
 		  this.getManageBoardList();
 	  });
 	/*
@@ -161,23 +166,11 @@ private syncRouteState(): void {
 
   getEnvironmentInfo() {
 	  
-	  console.log('getEnvironmentInfo called', this.lang);
+    console.log('getEnvironmentInfo called', this.lang);
 	  
     this.environmentService.getEnvironmentInfo(this.lang)
       .subscribe(response => {
-          //console.log("환경 정보 1", response);
-
-      	  //this.locale = response["locale"];
-
-      	  //console.log("lang 1-2", this.lang);
-      	  //console.log("locale 1-1", response.locale);
-          //console.log("locale 1-2", response["locale"]);
-
-      	  //if (this.lang == "" || this.lang == null) {
-      	    //this.locale = response.locale;
-      	  //} else {
-      	    //this.locale = this.lang;
-      	  //}
+          console.log("환경 정보 1", response);
 		  
 		  this.locale = this.lang || response?.locale || 'ko';
 		  
@@ -187,13 +180,9 @@ private syncRouteState(): void {
 
       	  this.loginId = response?.loginId ?? null;
 
-          console.log("this.loginId", this.loginId);
-      	  //alert("this.loginId : " + this.loginId);
-
-      	  //this.csrfToken = response?.csrfToken ?? '';
-      	  //this.cookieService.set( "referrer", response["referrer"], 0, "/", '.jisblee.me' );
+          this.cdr.detectChanges();
 		  
-		  //this.cdr.detectChanges();
+          console.log("this.loginId", this.loginId);
         }
       );
   }
