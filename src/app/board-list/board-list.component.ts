@@ -1,12 +1,12 @@
-import { Component, OnInit, Input, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, NgZone, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 //import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from '../message.service';
 
-import { Observable, of, startWith } from 'rxjs';
-import { catchError, map, tap, withLatestFrom, filter } from 'rxjs/operators';
+import { Observable, of, startWith, Subject } from 'rxjs';
+import { catchError, map, tap, withLatestFrom, filter, takeUntil } from 'rxjs/operators';
 
 import { BoardService } from '../board.service';
 import { EnvironmentService } from '../environment.service';
@@ -18,6 +18,8 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { Title } from '@angular/platform-browser';
 
+import { SharedService } from '../shared.service';
+
 @Component({
     selector: 'app-board-list',
     templateUrl: './board-list.component.html',
@@ -25,7 +27,7 @@ import { Title } from '@angular/platform-browser';
 	imports: [CommonModule],
     standalone: true
 })
-export class BoardListComponent implements OnInit {
+export class BoardListComponent implements OnInit, OnDestroy {
 
   //private list: Article[];
   list: Observable<Article[]> = of([]);
@@ -52,6 +54,8 @@ export class BoardListComponent implements OnInit {
   routerURL: string = "";
   routerArray: string[] = [];
 
+  private destroy$ = new Subject<void>();
+  
   constructor(
     private route: ActivatedRoute,
     private boardService: BoardService,
@@ -61,7 +65,8 @@ export class BoardListComponent implements OnInit {
     private router: Router,
     private titleService: Title,
 	private cdr: ChangeDetectorRef,
-	private ngZone: NgZone
+	private ngZone: NgZone,
+	private sharedService: SharedService
   ) {
     //this.routeEvent(this.router);
   }
@@ -88,13 +93,13 @@ export class BoardListComponent implements OnInit {
 
   ngOnInit() {
 
-    this.environmentService.getEmptyRequest().subscribe(
-      response => {
+    //this.environmentService.getEmptyRequest().subscribe(
+      //response => {
         //console.log("빈 요청 2-1", response);
 	//console.log("빈 요청 2-2", response.RequestURI);
-      }
-    );
-
+      //}
+    //);
+    
     this.boardNo = Number(this.route.snapshot.paramMap.get('boardNo'));
     this.pageNo = Number(this.route.snapshot.paramMap.get('pageNo'));
     this.lang = this.route.snapshot.paramMap.get('lang') == null ? "" : this.route.snapshot.paramMap.get('lang')!;
@@ -131,13 +136,39 @@ export class BoardListComponent implements OnInit {
 
     console.log("routerURL 2-1", this.routerURL);
 
+	this.sharedService.getManageBoardList()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res => {
+		
+        console.log("res", res);
+		
+		this.manageBoardList = res;
+		
+		for (var i=0; i < this.manageBoardList.length; i++) {
+	      if (this.manageBoardList[i].articleCount == 0) {
+	        this.manageBoardList.splice(i, 1);
+	        i--;
+	      } else {
+	        this.manageBoardObject[this.manageBoardList[i].boardIdx] = this.manageBoardList[i].boardName;
+		    this.cdr.detectChanges();
+	      }
+	    }
+		
+		this.getBoardList(this.boardNo, this.pageNo, this.lang);
+      });
+	
     this.getEnvironmentInfo();
-    this.getManageBoardList();
+    //this.getManageBoardList();
     this.getBoardListCount(this.boardNo);
-	this.getBoardList(this.boardNo, this.pageNo, this.lang);
+	//this.getBoardList(this.boardNo, this.pageNo, this.lang);
 	//this.cdr.detectChanges();
   }
-
+  
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+  
   getEnvironmentInfo(): void {
     this.environmentService.getEnvironmentInfo(this.lang)
       .subscribe(response => {
@@ -196,29 +227,7 @@ export class BoardListComponent implements OnInit {
       );
   }
 
-/*
-  getBoardList(boardNo: number, pageNo: number, lang: string): void {
-	//this.ngZone.run(() => {
-    this.boardService.getBoardList(boardNo, pageNo, lang)
-      .subscribe(response => {
-		setTimeout(() => {
-        this.list = response;
-		this.cdr.detectChanges();
-		});
-	    //console.log("목록", this.list);
-	  },
-        () => {},
-        () => {
-          for (var i=0; i < this.list.length; i++) {
-            this.list[i].boardName = this.manageBoardObject[this.list[i].boardIdx];
-			this.cdr.detectChanges();
-          }
-      }
-    );
-	//});
-  }
-*/
-getBoardList(boardNo: number, pageNo: number, lang: string): void {
+getBoardList( boardNo: number, pageNo: number, lang: string): void {
   this.list = this.boardService.getBoardList(boardNo, pageNo, lang).pipe(
     map(response =>
       (response ?? []).map(item => ({
@@ -226,6 +235,7 @@ getBoardList(boardNo: number, pageNo: number, lang: string): void {
         boardName: this.manageBoardObject[item.boardIdx]
       }))
     ),
+	tap(list1 => console.log("list1", list1)),
 	startWith([])
   );
 }
@@ -245,9 +255,11 @@ getBoardList(boardNo: number, pageNo: number, lang: string): void {
       () => {},
 		  
       () => {
+		
 
         //this.ngZone.run(() => {
-		this.listCount.pipe(map(value => {
+		//this.listCount.pipe(map(value => {
+		this.listCount.subscribe(value => {
         let pageEnd = Math.ceil(value / this.listLimit);  // 마지막 페이지 번호
 
         if (this.pageNo > pageEnd) {
@@ -259,52 +271,15 @@ getBoardList(boardNo: number, pageNo: number, lang: string): void {
 
         this.linkArray = Array.from(new Array(this.linkEnd - this.linkStart + 1), (x,i) => i + this.linkStart);
 		this.cdr.detectChanges();
-		}))
+		
+		console.log("#### linkArray", this.linkArray);
+		})
 		//});
       }
     );
 	
   }
   
-/*
-getBoardListCount(boardNo: number): void {
-  this.boardService.getBoardListCount(boardNo)
-    .subscribe(response => {
-      const nextListCount = response ?? 0;
-      const pageEnd = Math.ceil(nextListCount / this.listLimit);
-
-      let nextPageNo = this.pageNo;
-      if (nextPageNo > pageEnd && pageEnd > 0) {
-        nextPageNo = pageEnd;
-      }
-
-      const nextLinkStart =
-        Math.floor((nextPageNo - 1) / this.pageLinkCount) * this.pageLinkCount + 1;
-
-      const nextLinkEnd =
-        (pageEnd - nextLinkStart > this.pageLinkCount)
-          ? nextLinkStart + this.pageLinkCount
-          : pageEnd;
-
-      const nextLinkArray =
-        pageEnd > 0
-          ? Array.from(
-              { length: nextLinkEnd - nextLinkStart + 1 },
-              (_, i) => i + nextLinkStart
-            )
-          : [];
-
-      queueMicrotask(() => {
-        this.listCount = nextListCount;
-        this.pageNo = nextPageNo;
-        this.linkStart = nextLinkStart;
-        this.linkEnd = nextLinkEnd;
-        this.linkArray = nextLinkArray;
-      });
-    });
-}
-*/
-
   /** Log a HeroService message with the MessageService */
   private log(message: string) {
     this.messageService.add(`HeroService: ${message}`);

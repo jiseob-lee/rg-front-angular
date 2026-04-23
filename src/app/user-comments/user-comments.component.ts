@@ -37,7 +37,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class UserCommentsComponent implements OnInit {
 
   @Input() boardArticleIdx: number = 0;
-  @Input() csrfToken: string = "";
+  
 
   //headers: HttpHeaders;
 
@@ -120,12 +120,12 @@ export class UserCommentsComponent implements OnInit {
       //this.$ = jq.default;
     //}
   
-    this.environmentService.getEmptyRequest().subscribe(
-      response => {
+    //this.environmentService.getEmptyRequest().subscribe(
+      //response => {
         //console.log("빈 요청 4-1", response);
 	//console.log("빈 요청 4-2", response.RequestURI);
-      }
-    );
+      //}
+    //);
 
     let lang = this.route.snapshot.paramMap.get('lang') == null ? "" : this.route.snapshot.paramMap.get('lang')!;
     this.lang = lang;
@@ -185,20 +185,21 @@ export class UserCommentsComponent implements OnInit {
           console.log("this.loginId", this.loginId);
       	  //alert("this.loginId : " + this.loginId);
 
-      	  this.csrfToken = response["csrfToken"];
-		  this.cdr.detectChanges();
-		  console.log('browser csrfToken 2 :', response['csrfToken']);
+      	  //this.csrfToken = response["csrfToken"];
+		  //this.cdr.detectChanges();
+		  //console.log('browser csrfToken 2 :', response['csrfToken']);
       	  //this.cookieService.set( "referrer", response["referrer"], 0, "/", '.jisblee.me' );
         }
       );
 	  
-	  if (isPlatformBrowser(this.platformId)) {
-	    this.environmentService.getEnvironmentInfo(this.lang).subscribe(response => {
-		  console.log('browser csrfToken 1 :', response['csrfToken']);
-  	      this.csrfToken = response['csrfToken'];
-		  this.cdr.detectChanges();
-        });
-      }
+	  //if (isPlatformBrowser(this.platformId)) {
+	    //this.environmentService.getEnvironmentInfo(this.lang).subscribe(response => {
+		  //console.log('browser csrfToken 1 :', response['csrfToken']);
+  	      //this.csrfToken = response['csrfToken'];
+		  //this.cdr.detectChanges();
+        //});
+      //}
+	  
   }
 
 /*
@@ -304,8 +305,8 @@ getUserCommentList(boardArticleIdx: number): void {
 	  userPassword: this.userPassword,
 	  userName: this.userName,
 	  boardArticleIdx: this.boardArticleIdx,
-	  parentIdx: '',
-	  _csrf: this.csrfToken
+	  parentIdx: ''//,
+	  //_csrf: this.csrfToken
 	};
 
 	const body = new HttpParams()
@@ -317,7 +318,7 @@ getUserCommentList(boardArticleIdx: number): void {
 	  .set('parentIdx', "0")
 	  //.set('_csrf', formObj._csrf);
 
-	console.log('csrfToken:', this.csrfToken);
+	//console.log('csrfToken:', this.csrfToken);
 	console.log('userName:', this.userName);
 	console.log('content:', this.content);
 

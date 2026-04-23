@@ -12,6 +12,10 @@ import { Board } from './board';
 
 import { CookieService } from 'ngx-cookie-service';
 
+import { SharedService } from './shared.service';
+
+import { HttpClient } from '@angular/common/http';
+
 @Component({
 
 	selector: 'app-root',
@@ -53,17 +57,19 @@ export class AppComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private cookieService: CookieService,
-	private cdr: ChangeDetectorRef
+	private cdr: ChangeDetectorRef,
+	private sharedService: SharedService,
+	private http: HttpClient
   ) { }
 
   ngOnInit() {
 
-    this.environmentService.getEmptyRequest().subscribe(
-      response => {
+    //this.environmentService.getEmptyRequest().subscribe(
+      //response => {
         //console.log("빈 요청 1-1", response);
 	//console.log("빈 요청 1-2", response.RequestURI);
-      }
-    );
+      //}
+    //);
 
     console.log("router.url 1", this.router.url);
 
@@ -116,6 +122,16 @@ export class AppComponent implements OnInit {
         this.getManageBoardList();
     });
 	*/
+	
+	this.http.get('/csrf.do').subscribe({
+	  next: (res) => {
+		console.log('GET success:', res);
+	  },
+	  error: (err) => {
+		console.error('GET error:', err);
+	  }
+	});
+	
   }
 
 private syncRouteState(): void {
@@ -144,6 +160,9 @@ private syncRouteState(): void {
 }
 
   getEnvironmentInfo() {
+	  
+	  console.log('getEnvironmentInfo called', this.lang);
+	  
     this.environmentService.getEnvironmentInfo(this.lang)
       .subscribe(response => {
           //console.log("환경 정보 1", response);
@@ -162,6 +181,8 @@ private syncRouteState(): void {
 		  
 		  this.locale = this.lang || response?.locale || 'ko';
 		  
+		  this.sharedService.setLocale(this.locale);
+		  
 		  this.language = this.locale;
 
       	  this.loginId = response?.loginId ?? null;
@@ -169,10 +190,10 @@ private syncRouteState(): void {
           console.log("this.loginId", this.loginId);
       	  //alert("this.loginId : " + this.loginId);
 
-      	  this.csrfToken = response?.csrfToken ?? '';
+      	  //this.csrfToken = response?.csrfToken ?? '';
       	  //this.cookieService.set( "referrer", response["referrer"], 0, "/", '.jisblee.me' );
 		  
-		  this.cdr.detectChanges();
+		  //this.cdr.detectChanges();
         }
       );
   }
@@ -201,6 +222,7 @@ private syncRouteState(): void {
 	  
     this.manageBoardList$ = this.environmentService.getManageBoardList(this.lang).pipe(
       map(response => (response ?? []).filter(item => item.articleCount !== 0)),
+      tap(list => this.sharedService.setManageBoardList(list)),
       startWith([])
     );
   }

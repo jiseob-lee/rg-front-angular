@@ -33,7 +33,8 @@ export class BoardService {
     }
 
     // SSR
-    return 'http://127.0.0.1:8080';
+    //return 'http://127.0.0.1:8080';
+	return 'https://jisblee.me';
   }
 
   private buildUrl(path: string): string {

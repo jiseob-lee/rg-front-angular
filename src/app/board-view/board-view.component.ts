@@ -51,7 +51,7 @@ export class BoardViewComponent implements OnInit {
 
   attachmentList: Attachment[] = [];
 
-  csrfToken: string = "";
+  //csrfToken: string = "";
 
   cookiePath: string = "";
 
@@ -105,12 +105,12 @@ export class BoardViewComponent implements OnInit {
 
   ngOnInit() {
 
-    this.environmentService.getEmptyRequest().subscribe(
-      response => {
+    //this.environmentService.getEmptyRequest().subscribe(
+      //response => {
         //console.log("빈 요청 3-1", response);
 	//console.log("빈 요청 3-2", response.RequestURI);
-      }
-    );
+      //}
+    //);
 
     let boardNo = Number(this.route.snapshot.paramMap.get('boardNo'));
     let pageNo = Number(this.route.snapshot.paramMap.get('pageNo'));
