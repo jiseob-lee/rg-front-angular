@@ -53,10 +53,10 @@ export class EnvironmentService {
 
     const headers = new HttpHeaders().set('Access-Control-Allow-Origin', '*')
 			             .set("Content-Type", "application/x-www-form-urlencoded")
-                                     .set('Cache-Control', 'no-cache, no-store, must-revalidate')
-                                     .set('Pragma', 'no-cache')
-                                     .set('Expires', '0')
-				     .set('withCredentials', 'true');
+                         .set('Cache-Control', 'no-cache, no-store, must-revalidate')
+                         .set('Pragma', 'no-cache')
+                         .set('Expires', '0')
+				         .set('withCredentials', 'true');
     let options = { headers: headers };
 
     return this.http.get<Environment>(url, { withCredentials: true }).pipe(
