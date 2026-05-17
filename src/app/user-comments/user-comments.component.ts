@@ -94,21 +94,30 @@ export class UserCommentsComponent implements OnInit {
   }
 
   routeEvent(router: Router){
+	  
     router.events.subscribe(e => {
+		
       if (e instanceof NavigationEnd){
+		  
         //console.log("routeEvent 3", e);
 
-	this.routerURL = this.router.url;
+		this.routerURL = this.router.url;
 
         //console.log("routerURL 3", this.routerURL);
 
         var routerArray = this.routerURL.split("/");
         routerArray.splice(0, 1);
-	this.routerArray = routerArray;
+		this.routerArray = routerArray;
 
         if (this.routerArray[this.routerArray.length - 1] == "ko" || this.routerArray[this.routerArray.length - 1] == "en") {
-	    this.lang = this.routerArray[this.routerArray.length - 1];
-	}
+			this.lang = this.routerArray[this.routerArray.length - 1];
+			
+		} else {
+			let cookieLang = this.cookieService.get('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE');
+			if (cookieLang == "ko" || cookieLang == "en") {
+				this.lang = cookieLang;
+			}
+		}
       }
     });
   }

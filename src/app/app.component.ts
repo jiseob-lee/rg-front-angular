@@ -154,12 +154,12 @@ private syncRouteState(): void {
     this.lang = last;
     this.cookiePath = '/' + this.lang;
   } else {
-    const cookieLang = this.cookieService.get('lang');
+    const cookieLang = this.cookieService.get('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE');
     if (cookieLang) {
       this.cookiePath = '/' + cookieLang;
-      if (!this.lang) {
+      //if (!this.lang) {
         this.lang = cookieLang;
-      }
+      //
     }
   }
 }
@@ -228,7 +228,7 @@ private syncRouteState(): void {
 
     console.log("language", this.language);
 
-    this.cookieService.set( "lang", this.language, 0, "/", '.jisblee.me' );
+    this.cookieService.set( "org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE", this.language, 0, "/", '.jisblee.me' );
 
     let path = "";
 

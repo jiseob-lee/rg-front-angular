@@ -140,10 +140,10 @@ export class BoardViewComponent implements OnInit {
 
     if (this.lang == "ko" || this.lang == "en") {
       this.cookiePath = "/" + this.lang;
-    } else if (this.cookieService.get("lang") != null && this.cookieService.get("lang") != "") {
-      this.cookiePath = "/" + this.cookieService.get("lang");
+    } else if (this.cookieService.get("org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE") != null && this.cookieService.get("org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE") != "") {
+      this.cookiePath = "/" + this.cookieService.get("org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE");
       if (this.lang == "" || this.lang == null) {
-        this.lang = this.cookieService.get("lang");
+        this.lang = this.cookieService.get("org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE");
       }
     }
 
