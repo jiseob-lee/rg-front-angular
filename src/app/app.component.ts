@@ -153,6 +153,9 @@ private syncRouteState(): void {
   if (last === 'ko' || last === 'en') {
     this.lang = last;
     this.cookiePath = '/' + this.lang;
+	
+	this.cookieService.set( "org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE", this.lang, 0, "/", 'jisblee.me' );
+	
   } else {
     const cookieLang = this.cookieService.get('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE');
     if (cookieLang) {
@@ -228,7 +231,7 @@ private syncRouteState(): void {
 
     console.log("language", this.language);
 
-    this.cookieService.set( "org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE", this.language, 0, "/", '.jisblee.me' );
+    this.cookieService.set( "org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE", this.language, 0, "/", 'jisblee.me' );
 
     let path = "";
 
