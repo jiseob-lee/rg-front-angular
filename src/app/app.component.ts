@@ -1,4 +1,12 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+  Inject,
+  PLATFORM_ID,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -17,79 +25,74 @@ import { SharedService } from './shared.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
+  selector: 'app-root',
 
-	selector: 'app-root',
+  templateUrl: './app.component.html',
 
-	templateUrl: './app.component.html',
-
-	styleUrls: ['./app.component.css'],
-	imports: [FormsModule, RouterModule, CommonModule],
-	standalone: true
-
+  styleUrls: ['./app.component.css'],
+  imports: [FormsModule, RouterModule, CommonModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: true,
 })
 export class AppComponent implements OnInit {
-
   title = '이지섭 홈페이지';
 
-  locale: string = "ko";
+  locale: string = 'ko';
   loginId: string | null = null;
 
-  lang: string = "ko";
+  lang: string = 'ko';
 
   //manageBoardList: Board[] = [];
   //boardListReady = false;
-  
-  language: string = "ko";
 
-  routerURL: string = "";
+  language: string = 'ko';
+
+  routerURL: string = '';
   routerArray: string[] = [];
 
-  cookiePath: string = "/ko";
+  cookiePath: string = '/ko';
 
-  csrfToken: string = "";
+  csrfToken: string = '';
 
   boardNo: number = 0;
 
   manageBoardList$: Observable<Board[]> = new Observable<Board[]>();
-  
+
   constructor(
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
     private router: Router,
     private cookieService: CookieService,
-	private cdr: ChangeDetectorRef,
-	private sharedService: SharedService,
-	private http: HttpClient,
-	@Inject(PLATFORM_ID) private platformId: Object
-  ) { }
+    private cdr: ChangeDetectorRef,
+    private sharedService: SharedService,
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {}
 
   ngOnInit() {
-
     //this.environmentService.getEmptyRequest().subscribe(
-      //response => {
-        //console.log("빈 요청 1-1", response);
-	//console.log("빈 요청 1-2", response.RequestURI);
-      //}
+    //response => {
+    //console.log("빈 요청 1-1", response);
+    //console.log("빈 요청 1-2", response.RequestURI);
+    //}
     //);
 
-    console.log("router.url 1", this.router.url);
+    console.log('router.url 1', this.router.url);
 
-	  this.syncRouteState();
-	  if (isPlatformBrowser(this.platformId)) {
-	    this.getEnvironmentInfo();
-	  }
-	  this.getManageBoardList();
+    this.syncRouteState();
+    if (isPlatformBrowser(this.platformId)) {
+      this.getEnvironmentInfo();
+    }
+    this.getManageBoardList();
 
-	  this.router.events.pipe(
-		filter(e => e instanceof NavigationEnd)
-	  ).subscribe(() => {
-		  this.syncRouteState();
-		  if (isPlatformBrowser(this.platformId)) {
-		    this.getEnvironmentInfo();
-		  }
-		  this.getManageBoardList();
-	  });
-	/*
+    this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(() => {
+      this.syncRouteState();
+      if (isPlatformBrowser(this.platformId)) {
+        this.getEnvironmentInfo();
+      }
+      this.getManageBoardList();
+    });
+    /*
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd),
       withLatestFrom(this.route.paramMap, this.route.queryParamMap)
@@ -127,67 +130,70 @@ export class AppComponent implements OnInit {
         this.getManageBoardList();
     });
 	*/
-	
-	this.http.get('/csrf.do').subscribe({
-	  next: (res) => {
-		console.log('GET success:', res);
-	  },
-	  error: (err) => {
-		console.error('GET error:', err);
-	  }
-	});
-	
+
+    this.http.get('/csrf.do').subscribe({
+      next: (res) => {
+        console.log('GET success:', res);
+      },
+      error: (err) => {
+        console.error('GET error:', err);
+      },
+    });
   }
 
-private syncRouteState(): void {
-  this.routerURL = this.router.url;
+  private syncRouteState(): void {
+    this.routerURL = this.router.url;
 
-  const routerArray = this.routerURL.split('/');
-  routerArray.splice(0, 1);
-  this.routerArray = routerArray;
+    const routerArray = this.routerURL.split('/');
+    routerArray.splice(0, 1);
+    this.routerArray = routerArray;
 
-  this.boardNo = Number(this.routerArray[2] ?? 0);
+    this.boardNo = Number(this.routerArray[2] ?? 0);
 
-  const last = this.routerArray[this.routerArray.length - 1];
+    const last = this.routerArray[this.routerArray.length - 1];
 
-  if (last === 'ko' || last === 'en') {
-    this.lang = last;
-    this.cookiePath = '/' + this.lang;
-	
-	this.cookieService.set( "org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE", this.lang, 0, "/", 'jisblee.me' );
-	
-  } else {
-    const cookieLang = this.cookieService.get('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE');
-    if (cookieLang) {
-      this.cookiePath = '/' + cookieLang;
-      //if (!this.lang) {
+    if (last === 'ko' || last === 'en') {
+      this.lang = last;
+      this.cookiePath = '/' + this.lang;
+
+      this.cookieService.set(
+        'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
+        this.lang,
+        0,
+        '/',
+        'jisblee.me',
+      );
+    } else {
+      const cookieLang = this.cookieService.get(
+        'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
+      );
+      if (cookieLang) {
+        this.cookiePath = '/' + cookieLang;
+        //if (!this.lang) {
         this.lang = cookieLang;
-      //
+        //
+      }
     }
   }
-}
 
   getEnvironmentInfo() {
-	  
     console.log('getEnvironmentInfo called', this.lang);
-	  
-    this.environmentService.getEnvironmentInfo(this.lang)
-      .subscribe(response => {
-          console.log("환경 정보 1", response);
-		  
-		  this.locale = this.lang || response?.locale || 'ko';
-		  
-		  this.sharedService.setLocale(this.locale);
-		  
-		  this.language = this.locale;
 
-      	  this.loginId = response?.loginId ?? null;
+    this.environmentService.getEnvironmentInfo(this.lang).subscribe((response) => {
+      console.log('환경 정보 1', response);
 
-          this.cdr.detectChanges();
-		  
-          console.log("this.loginId", this.loginId);
-        }
-      );
+      this.locale = this.lang || response?.locale || 'ko';
+
+      this.sharedService.setLocale(this.locale);
+
+      this.language = this.locale;
+
+      this.loginId = response?.loginId ?? null;
+
+      this.cdr.detectChanges();
+
+      console.log('this.loginId', this.loginId);
+    });
   }
 
   /*
@@ -211,14 +217,13 @@ private syncRouteState(): void {
   */
 
   getManageBoardList(): void {
-	  
     this.manageBoardList$ = this.environmentService.getManageBoardList(this.lang).pipe(
-      map(response => (response ?? []).filter(item => item.articleCount !== 0)),
-      tap(list => this.sharedService.setManageBoardList(list)),
-      startWith([])
+      map((response) => (response ?? []).filter((item) => item.articleCount !== 0)),
+      tap((list) => this.sharedService.setManageBoardList(list)),
+      startWith([]),
     );
   }
-  
+
   trackBoard(_index: number, item: Board): number {
     return item.boardIdx;
   }
@@ -228,16 +233,21 @@ private syncRouteState(): void {
   }
 
   changeLanguage(): void {
+    console.log('language', this.language);
 
-    console.log("language", this.language);
+    this.cookieService.set(
+      'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
+      this.language,
+      0,
+      '/',
+      'jisblee.me',
+    );
 
-    this.cookieService.set( "org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE", this.language, 0, "/", 'jisblee.me' );
+    let path = '';
 
-    let path = "";
-
-    for (var i=0; i < this.routerArray.length; i++) {
-      if (this.routerArray[i] != "ko" && this.routerArray[i] != "en") {
-	path += "/" + this.routerArray[i];
+    for (var i = 0; i < this.routerArray.length; i++) {
+      if (this.routerArray[i] != 'ko' && this.routerArray[i] != 'en') {
+        path += '/' + this.routerArray[i];
       }
     }
 
