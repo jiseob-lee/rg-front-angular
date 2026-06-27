@@ -160,8 +160,7 @@ export class AppComponent implements OnInit {
         'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
         this.lang,
         0,
-        '/',
-        'jisblee.me',
+        '/'
       );
     } else {
       const cookieLang = this.cookieService.get(
@@ -239,8 +238,7 @@ export class AppComponent implements OnInit {
       'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
       this.language,
       0,
-      '/',
-      'jisblee.me',
+      '/'
     );
 
     let path = '';
