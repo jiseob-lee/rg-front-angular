@@ -162,6 +162,15 @@ export class AppComponent implements OnInit {
         0,
         '/'
       );
+      
+	  this.cookieService.set(
+        'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
+        this.lang,
+        0,
+        '/',
+		'jisblee.me'
+      );
+	  
     } else {
       const cookieLang = this.cookieService.get(
         'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
@@ -233,6 +242,14 @@ export class AppComponent implements OnInit {
 
   changeLanguage(): void {
     console.log('language', this.language);
+
+    this.cookieService.set(
+      'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
+      this.language,
+      0,
+      '/',
+      'jisblee.me',
+    );
 
     this.cookieService.set(
       'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
