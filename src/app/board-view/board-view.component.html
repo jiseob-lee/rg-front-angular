@@ -49,8 +49,8 @@
 		      <td align="left">{{content == null ? "" : content.hitCount }}</td>
 		    </tr>
 		    <tr align="center">
-		      <td colspan="8" align="left" class="body" *ngIf="locale == 'ko'" [innerHTML]="content == null ? '' : content.contentSafe"></td>
-		      <td colspan="8" align="left" class="body" *ngIf="locale != 'ko'" [innerHTML]="content == null ? '' : content.contentEngSafe"></td>
+		      <td colspan="8" align="left" class="body" *ngIf="locale == 'ko'" [innerHTML]="content == null ? '' : content.contentSafe" #bodyArea1></td>
+		      <td colspan="8" align="left" class="body" *ngIf="locale != 'ko'" [innerHTML]="content == null ? '' : content.contentEngSafe" #bodyArea2></td>
 		    </tr>
 		    
 			

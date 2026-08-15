@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
+
 import { ActivatedRoute, Router, NavigationEnd, RoutesRecognized } from '@angular/router';
 
 import { isPlatformServer } from '@angular/common';
@@ -34,6 +35,10 @@ import { Title } from '@angular/platform-browser';
 import { UserCommentsComponent } from '../user-comments/user-comments.component';
 
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+import { AfterViewInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
+
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-board-view',
@@ -65,6 +70,14 @@ export class BoardViewComponent implements OnInit {
   routerURL: string = '';
   routerArray: string[] = [];
 
+  private isTracked = false;
+
+  @ViewChild('bodyArea1')
+  bodyArea1!: ElementRef;
+  
+  @ViewChild('bodyArea2')
+  bodyArea2!: ElementRef;
+
   constructor(
     private route: ActivatedRoute,
     private boardService: BoardService,
@@ -78,6 +91,9 @@ export class BoardViewComponent implements OnInit {
     private ngZone: NgZone,
     private sanitizer: DomSanitizer,
     private cdr: ChangeDetectorRef,
+    private renderer: Renderer2,
+    private elementRef: ElementRef,
+    private http: HttpClient
   ) {
     //this.routeEvent(this.router);
   }
@@ -294,6 +310,28 @@ export class BoardViewComponent implements OnInit {
           } else {
             this.titleService.setTitle(content.subject ?? '');
           }
+		  
+		  
+		  
+          setTimeout(() => {
+            
+			let video = null;
+			
+			if (this.bodyArea1) {
+			  video = this.bodyArea1.nativeElement.querySelector('#slowCityVideo1') 
+		    }
+			
+			if (this.bodyArea2) {
+		      video = this.bodyArea2.nativeElement.querySelector('#slowCityVideo2');
+			}
+			
+            console.log("####", video);
+			
+			this.bindVideoEvent();
+			
+          }, 1800);
+
+
         }),
       );
   }
@@ -317,4 +355,49 @@ export class BoardViewComponent implements OnInit {
     //window.location.href = 'your-url';
     //});
   }
+  
+  
+  bindVideoEvent() {
+
+
+    console.log("#### ngAfterViewInit");
+	
+	//const video = this.elementRef.nativeElement.querySelector('#slowCityVideo');
+
+	//const video = this.bodyArea1 ? this.bodyArea1.nativeElement.querySelector('#slowCityVideo') 
+		//: this.bodyArea2.nativeElement.querySelector('#slowCityVideo');
+
+	let video = null;
+	
+	if (this.bodyArea1) {
+	  video = this.bodyArea1.nativeElement.querySelector('#slowCityVideo1') 
+	}
+	
+	if (this.bodyArea2) {
+	  video = this.bodyArea2.nativeElement.querySelector('#slowCityVideo2');
+	}
+	
+    if (!video) {
+      console.log("#### !video");
+      return;
+    } else {
+      console.log("#### video");
+	}
+ 
+    this.renderer.listen(video, 'play', () => {
+
+      //if (this.isTracked) {
+        //return;
+      //}
+ 
+      this.http.post('/registSlowCityMoviePlay.do', {
+        action: 'play',
+        timestamp: new Date().toISOString()
+      }).subscribe(() => {
+        //this.isTracked = true;
+      });
+    });
+
+  }
+
 }
