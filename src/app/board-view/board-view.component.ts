@@ -198,7 +198,7 @@ export class BoardViewComponent implements OnInit {
     //});
 
     if (isPlatformBrowser(this.platformId)) {
-      this.getEnvironmentInfo(lang);
+      this.getEnvironmentInfo(this.lang);
     }
 
     this.getBoardContent(this.boardArticleIdx, this.locale);
