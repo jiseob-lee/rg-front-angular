@@ -72,6 +72,9 @@ export class BoardViewComponent implements OnInit {
 
   private isTracked = false;
 
+  private subjectKor = "";
+  private subjectEng = "";
+
   @ViewChild('bodyArea1')
   bodyArea1!: ElementRef;
   
@@ -165,16 +168,17 @@ export class BoardViewComponent implements OnInit {
 
     if (this.lang == 'ko' || this.lang == 'en') {
       this.cookiePath = '/' + this.lang;
+	  
     } else if (
-      this.cookieService.get('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE') !=
-        null &&
-      this.cookieService.get('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE') !=
-        ''
+      this.cookieService.get('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE') == 'ko' 
+	  || this.cookieService.get('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE') == 'en'
     ) {
-      this.cookiePath =
+      
+	  this.cookiePath =
         '/' +
         this.cookieService.get('org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE');
-      if (this.lang == '' || this.lang == null) {
+      
+	  if (this.lang != 'ko' && this.lang != 'en') {
         this.lang = this.cookieService.get(
           'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
         );
@@ -204,6 +208,7 @@ export class BoardViewComponent implements OnInit {
   getEnvironmentInfo(lang: string): void {
     this.environmentService.getEnvironmentInfo(this.lang).subscribe(
       (response) => {
+		
         let locale = '';
 
         //if (lang == "ko" || lang == "en") {
@@ -214,16 +219,24 @@ export class BoardViewComponent implements OnInit {
 
         //this.locale = locale;
 
-        if (this.lang == '' || this.lang == null) {
-          this.locale = response.locale;
+        if (this.lang == 'ko' || this.lang == 'en') {
+          this.locale = this.lang;
           this.cdr.detectChanges();
         } else {
-          this.locale = this.lang;
+          this.locale = response.locale;
           this.cdr.detectChanges();
         }
 
         //console.log("lang 3", this.lang);
-        //console.log("locale 3-1", this.locale);
+        console.log("#### locale 3-1", this.locale);
+
+        if (this.subjectKor) {
+          if (this.locale === 'en') {
+            this.titleService.setTitle(this.subjectEng);
+          } else {
+            this.titleService.setTitle(this.subjectKor);
+          }
+		}
 
         this.loginId = response.loginId;
         this.cdr.detectChanges();
@@ -305,12 +318,16 @@ export class BoardViewComponent implements OnInit {
             return;
           }
 
+          console.log("#### setTitle, this.locale", this.locale);
+		  
           if (this.locale === 'en') {
             this.titleService.setTitle(content.subjectEng ?? '');
           } else {
             this.titleService.setTitle(content.subject ?? '');
           }
 		  
+		  this.subjectKor = content.subject ?? '';
+		  this.subjectEng = content.subjectEng ?? '';
 		  
 		  
           setTimeout(() => {
@@ -359,8 +376,7 @@ export class BoardViewComponent implements OnInit {
   
   bindVideoEvent() {
 
-
-    console.log("#### ngAfterViewInit");
+    console.log("#### bindVideoEvent");
 	
 	//const video = this.elementRef.nativeElement.querySelector('#slowCityVideo');
 

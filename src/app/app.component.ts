@@ -7,6 +7,7 @@ import {
   PLATFORM_ID,
   ChangeDetectionStrategy,
 } from '@angular/core';
+
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -24,6 +25,8 @@ import { SharedService } from './shared.service';
 
 import { HttpClient } from '@angular/common/http';
 
+import { AfterViewInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
+
 @Component({
   selector: 'app-root',
 
@@ -34,23 +37,23 @@ import { HttpClient } from '@angular/common/http';
   changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true,
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   title = '이지섭 홈페이지';
 
   locale: string = 'ko';
   loginId: string | null = null;
 
-  lang: string = 'ko';
+  lang: string = '';
 
   //manageBoardList: Board[] = [];
   //boardListReady = false;
 
-  language: string = 'ko';
+  language: string = '';
 
   routerURL: string = '';
   routerArray: string[] = [];
 
-  cookiePath: string = '/ko';
+  cookiePath: string = '';
 
   csrfToken: string = '';
 
@@ -79,19 +82,29 @@ export class AppComponent implements OnInit {
 
     console.log('router.url 1', this.router.url);
 
-    this.syncRouteState();
+
+	
+    //this.syncRouteState();
     if (isPlatformBrowser(this.platformId)) {
       this.getEnvironmentInfo();
     }
-    this.getManageBoardList();
 
+    console.log('#### this.language', this.language);
+	
+	this.getManageBoardList();
+
+
+	
     this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(() => {
       this.syncRouteState();
-      if (isPlatformBrowser(this.platformId)) {
-        this.getEnvironmentInfo();
-      }
+      //if (isPlatformBrowser(this.platformId)) {
+        //this.getEnvironmentInfo();
+      //}
       this.getManageBoardList();
     });
+	
+	
+	
     /*
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd),
@@ -270,4 +283,33 @@ export class AppComponent implements OnInit {
 
     location.href = path;
   }
+  
+  ngAfterViewInit(): void {
+	/*
+	if (isPlatformBrowser(this.platformId)) {
+      this.getEnvironmentInfo();
+    }
+	
+    this.cookieService.set(
+      'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
+      this.language,
+      0,
+      '/',
+      'jisblee.me',
+    );
+
+    this.cookieService.set(
+      'org.springframework.web.servlet.i18n.CookieLocaleResolver.LOCALE',
+      this.language,
+      0,
+      '/'
+    );
+
+	//this.changeLanguage();
+	this.syncRouteState();
+	this.getManageBoardList();
+	*/
+  }
+  
+  
 }
